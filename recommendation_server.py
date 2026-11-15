@@ -10,6 +10,7 @@ tested with just the stdlib + pytest, and the container image stays tiny.
 """
 from __future__ import annotations
 
+import collections
 import json
 import os
 import threading
@@ -23,8 +24,8 @@ import pagination
 import cache
 import pricing
 
-# analytics: full history of every product id this instance has ever served
-_seen_product_ids: list[str] = []
+# analytics: bounded window of recently served product ids (must stay bounded to avoid OOM)
+_seen_product_ids: collections.deque[str] = collections.deque(maxlen=128)
 
 # demo catalog: a handful of SKUs is enough for the endpoints below
 CATALOG = [f"PRODUCT-{i}" for i in range(4)]
