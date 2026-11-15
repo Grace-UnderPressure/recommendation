@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 import os
 import threading
+from collections import deque
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
@@ -23,8 +24,8 @@ import pagination
 import cache
 import pricing
 
-# analytics: full history of every product id this instance has ever served
-_seen_product_ids: list[str] = []
+# analytics: bounded cache of the most recent product ids served
+_seen_product_ids: deque[str] = deque(maxlen=128)
 
 # demo catalog: a handful of SKUs is enough for the endpoints below
 CATALOG = [f"PRODUCT-{i}" for i in range(4)]
