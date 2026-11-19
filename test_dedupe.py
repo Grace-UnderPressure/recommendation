@@ -8,3 +8,8 @@ import dedupe
 def test_dedupe_removes_exact_duplicates():
     out = dedupe.dedupe_ids(["PRODUCT-1", "PRODUCT-1", "PRODUCT-2"])
     assert out == ["PRODUCT-1", "PRODUCT-2"], f"duplicates leaked through: {out}"
+
+
+def test_dedupe_is_case_insensitive_for_uppercase_ids():
+    out = dedupe.dedupe_ids(["PRODUCT-0", "PRODUCT-3"] + ["PRODUCT-0", "PRODUCT-7"])
+    assert out == ["PRODUCT-0", "PRODUCT-3", "PRODUCT-7"], out
